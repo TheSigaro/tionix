@@ -3,4 +3,7 @@
   - name: Test Message
     debug:
       msg: "AWX and Ansible111111111"
+  - name: Ping host
+    debug:
+      ping: "{{ awxinvvar }}"
 
