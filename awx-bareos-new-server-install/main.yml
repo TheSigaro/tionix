@@ -1,0 +1,20 @@
+---
+
+- name: Install the latest version of PIP
+  yum:
+    name: python2-pip
+    state: present
+
+- name: Install Tower/AWX cli tool
+  pip:
+    name: ansible-tower-cli
+
+- name: Configure tower-cli
+  shell: tower_cli config {{ item }}
+  with_items:
+    - "host http://{{ tower_cli_host }}"
+    - "user {{ tower_cli_user }}"
+    - "password {{ tower_cli_pass }}"
+    - "verify_ssl false"
+
+
