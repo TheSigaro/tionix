@@ -3,16 +3,12 @@
 - name: Create storage location
   file: path={{ storage_location }} owner=bareos group=bareos  mode=0770 state=directory
 
-- name: Push Bareos-Storage configuration files
+- name: Push Bareos-Storage configuration files to Director
   template: src={{item.src}} dest={{item.dest}}  mode=0640 owner=bareos group=bareos
   with_items:
-      - { src: 'device/FileStorage.conf', dest: '/etc/bareos/bareos-sd.d/device/FileStorage.conf' }
-      - { src: 'director/bareos-dir.conf', dest: '/etc/bareos/bareos-sd.d/director/bareos-dir.conf' }
-      - { src: 'messages/Standard.conf', dest: '/etc/bareos/bareos-sd.d/messages/Standard.conf' }
-      - { src: 'storage/bareos-sd.conf', dest: '/etc/bareos/bareos-sd.d/storage/bareos-sd.conf' }
-  notify: reload bareos-storage
+      - { src: 'storage/File.conf', dest: '/etc/bareos/bareos-dir.d/storage/File.conf' }
+  notify: reload bareos-director
 
-  
-- name: Enable bareos storage service
-  action: service name=bareos-sd state=started enabled=yes
+- name: Enable bareos director service
+  action: service name=bareos-dir state=started enabled=yes
 

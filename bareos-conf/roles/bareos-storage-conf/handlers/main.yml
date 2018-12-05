@@ -1,2 +1,2 @@
-- name: reload bareos-storage
-  action: service name=bareos-sd state=restarted
+- name: reload bareos-director
+  action: service name=bareos-dir state=restarted
