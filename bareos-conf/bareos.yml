@@ -1,0 +1,6 @@
+- name: Bareos storage configuration
+  hosts: director
+  roles:
+    - role: bareos-storage-conf
+
+
