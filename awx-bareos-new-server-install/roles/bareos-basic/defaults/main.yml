@@ -1,0 +1,33 @@
+---
+
+################################################################
+### Database section                                         ###
+### Choose the database and version that should be installed ###
+### Supported databases: mariadb, postgres                   ###
+################################################################
+database: postgresql
+
+#database: mariadb
+#db_version: 10.1
+
+##################################################
+### Bareos database section ######################
+##################################################
+mariadb_root_password: "!QAZ2wsx"                      # This is an example password. Change it.
+mariadb_login_host: localhost
+
+##################################################
+### Bareos version ###############################
+### Choose the version of bareos if needed #######
+### Latest will be used by default ###############
+##################################################
+#bareos_version:
+
+webui_admin_user: admin
+webui_admin_pass: "!QAZ2wsx"                           # This is an example password. Change it.
+
+client_password: "!QAZ2wsx"                            # This is an example password. Change it.
+
+tower_cli_host: 192.168.1.102
+tower_cli_user: admin
+tower_cli_pass: password

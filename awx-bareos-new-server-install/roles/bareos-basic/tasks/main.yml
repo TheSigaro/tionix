@@ -1,0 +1,40 @@
+---
+
+- name: Check if EPEL repo is already configured.
+  stat: path="/etc/yum.repos.d/epel.repo"
+  register: epel_repofile_result
+
+- name: Set Epel repo for RHEl/CentOS
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+
+- name: Set Bareos repo for RHEL/CentOS
+  yum_repository:
+    name: bareos
+    description: 'bareos repo details'
+    baseurl: "http://download.bareos.org/bareos/release/{{ bareos_version | default('latest') }}/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/"
+    gpgcheck: yes
+    gpgkey: "http://download.bareos.org/bareos/release/{{ bareos_version | default('latest') }}/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/repodata/repomd.xml.key"
+    enabled: yes
+    state: present
+  when: ansible_os_family == 'RedHat'
+
+- block:
+    - name: Add a key for Bareos install for Debian/Ubuntu distribution
+      apt_key:
+        url: "http://download.bareos.org/bareos/release/{{ bareos_version | default('latest') }}/\
+        {% if ansible_distribution == 'Ubuntu' %}x{{ ansible_distribution }}_{{ ansible_distribution_version }}\
+        {% elif ansible_distribution == 'Debian' %}{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.0{% endif %}/Release.key"
+        state: present
+
+    - name: Set Bareos repo for Debian/Ubuntu distribution
+      apt_repository:
+        repo: "deb http://download.bareos.org/bareos/release/{{ bareos_version | default('latest') }}/\
+        {% if ansible_distribution == 'Ubuntu' %}x{{ ansible_distribution }}_{{ ansible_distribution_version }}\
+        {% elif ansible_distribution == 'Debian' %}{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.0{% endif %} /"
+        filename: bareos
+        update_cache: yes
+        state: present
+  when: ansible_os_family == 'Debian'
